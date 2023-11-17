@@ -19,6 +19,8 @@ sns.set(style="whitegrid", color_codes=True)
 import matplotlib.cm as cm
 
 from pathlib import Path
+import joblib
+
 
 from sklearn.linear_model import LogisticRegression
 from sklearn.feature_selection import RFE
@@ -384,7 +386,7 @@ def logistic_reg(
         ", i.e. a false positive rate of %.2f%%." % (np.array(fpr[idx])*100))
 
 
-# GridSearchCV evaluating using multiple scorers simultaneously¶
+# GridSearchCV evaluating using multiple scorers simultaneously
     X = final_train[Selected_features]
 
     param_grid = {'C': np.arange(1e-05, 3, 0.1)}
@@ -396,6 +398,10 @@ def logistic_reg(
     gs.fit(X, y)
     results = gs.cv_results_
 
+# Save the best logistic regression model to a file in the model directory
+    joblib.dump(best_logreg, model_path / "best_model_LogReg.pkl")
+    print(f'LOG: The best model called best_model_LogReg.pkl stored in {model_path} directory')
+    
     print('='*20)
     print("best params: " + str(gs.best_estimator_))
     print("best params: " + str(gs.best_params_))
